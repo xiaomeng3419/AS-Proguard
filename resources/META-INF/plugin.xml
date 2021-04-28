@@ -1,0 +1,36 @@
+<idea-plugin>
+  <id>com.layton.zp.plugin</id>
+  <name>Layton·Zhang Android</name>
+  <version>1.0</version>
+  <vendor email="emzhangpan@163.com" url="http://www.baidu.com">NONE</vendor>
+
+  <description><![CDATA[
+      layton self-developed android plugin for online decoding of abnormal logs
+      <em>Android</em>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      layton self-developed android plugin for online decoding of abnormal logs
+      <em>Android</em>
+    ]]>
+  </change-notes>
+
+  <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="160.0"/>
+
+  <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+<!--    <applicationService serviceImplementation="com.layton.zp.plugin.config.LaytonPropertiesComponent"/>-->
+    <toolWindow id="Layton Proguard" factoryClass="com.layton.zp.plugin.ui.factory.ProguardWindowFactory"
+                anchor="right" icon="/img/decode_icon.svg"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>
