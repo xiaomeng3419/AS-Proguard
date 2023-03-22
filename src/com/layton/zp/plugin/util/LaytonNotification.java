@@ -1,12 +1,12 @@
 package com.layton.zp.plugin.util;
 
 import com.intellij.notification.*;
-import com.intellij.openapi.ui.MessageType;
+/*import com.intellij.openapi.ui.MessageType;
 import com.intellij.remoteServer.impl.runtime.log.ConsoleTerminalHandlerImpl;
 import com.jediterm.terminal.Terminal;
 
 import javax.smartcardio.CardTerminals;
-import javax.smartcardio.TerminalFactory;
+import javax.smartcardio.TerminalFactory;*/
 
 public class LaytonNotification {
     public static void notification(String content, NotificationType level) {

@@ -1,6 +1,5 @@
 package com.layton.zp.plugin.ui;
 
-import com.intellij.database.extensions.Clipboard;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.ScriptRunnerUtil;
 import com.intellij.execution.runners.ExecutionEnvironment;

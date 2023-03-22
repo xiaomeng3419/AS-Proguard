@@ -1,9 +1,5 @@
 package com.layton.zp.plugin.config;
 
-import a.c.H;
-import com.intellij.openapi.ui.MessageType;
-import com.layton.zp.plugin.util.LaytonNotification;
-
 import java.util.*;
 
 public class LaytonConfiguration {

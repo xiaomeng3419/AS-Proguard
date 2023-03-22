@@ -10,3 +10,8 @@ xz -k  解压并保留
 
 #https://bbs.csdn.net/topics/120042623 关于点击按钮把内从复制到粘贴板
 # 关于自动打开Tab页面。https://www.programcreek.com/java-api-examples/?api=com.intellij.openapi.wm.ToolWindow
+
+
+如何打包并安装:
+
+ 在build工具栏中点击`Prepare Plugin Moudle "name" For deployment`

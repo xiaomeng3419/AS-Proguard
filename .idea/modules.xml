@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/../../resources/META-INF/plugin.xml" />
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AS-Proguard.iml" filepath="$PROJECT_DIR$/AS-Proguard.iml" />
+    </modules>
+  </component>
+
+<!--  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+  <output url="file://$MODULE_DIR$/../../build/classes/main" />
+  <exclude-output />
+  <content url="file://$MODULE_DIR$/../../src/main">
+    <sourceFolder url="file://$MODULE_DIR$/../../src/main/java" isTestSource="false" />
+    <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
+  </content>-->
+</project>

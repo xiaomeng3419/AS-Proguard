@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="AS-PROGUARD">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/resources/shell/AS-PROGUARD.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
