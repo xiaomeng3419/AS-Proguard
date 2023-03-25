@@ -13,9 +13,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
-import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+import static javax.swing.ScrollPaneConstants.*;
 
 /**
  * every area must be depends on panel
@@ -60,24 +61,32 @@ public class MainTabPage {
                 if (unicodeToChinese.isSelected()) {
                     unicodeToTransformResult = Utils.unicodeToChinese(unicodeToTransformResult);
                 }
+                boolean parseSucceed = false;
                 try {
                     JSONObject jsonObject = JSONObject.parseObject(unicodeToTransformResult);
                     result = JSON.toJSONString(jsonObject, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                             SerializerFeature.WriteDateUseDateFormat);
                     ClipBoardUtil.copy(result);
+                    parseSucceed = true;
                 } catch (Exception exception1) {
                     try {
                         JSONArray jsonObject = JSONArray.parseArray(unicodeToTransformResult);
                         result = JSONArray.toJSONString(jsonObject, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
                                 SerializerFeature.WriteDateUseDateFormat);
                         ClipBoardUtil.copy(result);
-                    }catch (Exception exception){
+                        parseSucceed = true;
+                    } catch (Exception exception) {
                         result = result + ": " + Utils.LINE_SPLIT + unicodeToTransformResult;
                         exception.printStackTrace();
                         TerminalUtil.outputJson(exception.getMessage());
                     }
                 }
                 destContent.setText(result);
+                if (parseSucceed) {
+                    TerminalUtil.output("origin content:", originContent.getText());
+                    TerminalUtil.output("JSON", result);
+                    originContent.setText("");
+                }
             }
         });
         printBtn.addActionListener(new ActionListener() {
@@ -89,9 +98,19 @@ public class MainTabPage {
             }
         });
         destContentScroll.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
-        destContentScroll.setHorizontalScrollBar(new JScrollBar(Adjustable.HORIZONTAL));
+        JScrollBar js = new JScrollBar(Adjustable.HORIZONTAL);
+        destContentScroll.setHorizontalScrollBar(js);
         destContentScroll.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        destContentScroll.setPreferredSize(new Dimension(530, 1070));
-        destContentScroll.
+        destContentScroll.setViewportView(destContent);
+ /*       destContent.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // 在这里执行你想要执行的操作，比如重绘界面
+                TerminalUtil.output("log1-width", "" + destContent.getWidth());
+                TerminalUtil.output("log1-height", "" + destContent.getHeight());
+                TerminalUtil.output("log2-width", "" + destContentScroll.getWidth());
+                TerminalUtil.output("log2-height", "" + destContentScroll.getHeight());
+            }
+        });*/
     }
 }

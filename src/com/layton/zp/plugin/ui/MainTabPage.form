@@ -29,6 +29,7 @@
             </constraints>
             <properties>
               <alignmentY value="1.0"/>
+              <autoscrolls value="true"/>
             </properties>
             <border type="none"/>
             <children>
@@ -76,6 +77,7 @@
                 <properties>
                   <autoscrolls value="true"/>
                   <horizontalScrollBarPolicy value="30"/>
+                  <visible value="true"/>
                 </properties>
                 <border type="none"/>
                 <children>

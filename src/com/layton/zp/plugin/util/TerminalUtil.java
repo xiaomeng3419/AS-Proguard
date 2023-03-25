@@ -73,7 +73,26 @@ public class TerminalUtil {
     public static ConsoleView getConsoleView() {
         if (consoleView != null) {
             if (!toolWindow.isVisible()) {
-                toolWindow.show(new Runnable() {
+                if(toolWindow.getContentManager().getContentCount()>=0){
+                    boolean exist = false;
+                    Content[] contents = toolWindow.getContentManager().getContents();
+                    for (int i = 0; i < contents.length; i++) {
+                        if (contents[i] instanceof ContentImpl && contents[i].getDisplayName().equals("Proguard Decode")) {
+                            exist = true;
+                        }
+                    }
+                    if(!exist){
+                        consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(JsonFormatWindowFactory.getProject()).getConsole();
+                        content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
+                        toolWindow.getContentManager().addContent(content);
+                        toolWindow.getContentManager().setSelectedContent(content, true);
+                    }
+                    toolWindow.activate(null, true, false);
+                } else {
+                    createConsoleView();
+                }
+
+/*                toolWindow.show(new Runnable() {
                     @Override
                     public void run() {
 
@@ -82,25 +101,51 @@ public class TerminalUtil {
                 boolean exist = false;
                 Content[] contents = toolWindow.getContentManager().getContents();
                 for (int i = 0; i < contents.length; i++) {
-                    if(contents[i] instanceof ContentImpl && contents[i].getDisplayName().equals("Proguard Decode")){
+                    if (contents[i] instanceof ContentImpl && contents[i].getDisplayName().equals("Proguard Decode")) {
                         return consoleView;
                     }
                 }
                 consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(JsonFormatWindowFactory.getProject()).getConsole();
                 content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
                 toolWindow.getContentManager().addContent(content);
-                toolWindow.getContentManager().setSelectedContent(content, true);
+                toolWindow.getContentManager().setSelectedContent(content, true);*/
 /*                Content content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
                 consoleView.getComponent().getRootPane().setBackground(Color.orange);
                 toolWindow.getContentManager().addContent(content);
                 toolWindow.getContentManager().setSelectedContent(content, true);*/
+            } else {
+                if (toolWindow.getContentManager().getContentCount() <= 0) {
+                    createConsoleView();
+                } else {
+                    boolean exist = false;
+                    Content[] contents = toolWindow.getContentManager().getContents();
+                    for (int i = 0; i < contents.length; i++) {
+                        if (contents[i] instanceof ContentImpl && contents[i].getDisplayName().equals("Proguard Decode")) {
+                            exist = true;
+                        }
+                    }
+                    if(!exist){
+                        consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(JsonFormatWindowFactory.getProject()).getConsole();
+                        content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
+                        toolWindow.getContentManager().addContent(content);
+                        toolWindow.getContentManager().setSelectedContent(content, true);
+                    } else {
+                        toolWindow.getContentManager().setSelectedContent(content, true);
+                    }
+                    toolWindow.activate(null, true, false);
+                }
+     /*           if(toolWindow.getContentManager().getContentCount()<=0){
+                    content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
+                    toolWindow.getContentManager().addContent(content);
+                    toolWindow.getContentManager().setSelectedContent(content, true);
+                }*/
             }
             return consoleView;
         }
         return createConsoleView();
     }
 
-    public static ConsoleView createConsoleView(){
+    public static ConsoleView createConsoleView() {
         try {
 //                ToolWindowManager.getInstance(project).registerToolWindow(ToolWindowId.RUN,true, ToolWindowAnchor.BOTTOM);
 //                RunContentManager.getInstance(project).getContentDescriptorToolWindowId()
@@ -158,5 +203,24 @@ public class TerminalUtil {
         getConsoleView().print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
         getConsoleView().print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
     }
+
+
+
+
+/*
+    public static void createTerminal() {
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(JsonFormatWindowFactory.getProject());
+        ToolWindow toolWindow = toolWindowManager.registerToolWindow("Proguard", true, ToolWindowAnchor.BOTTOM);
+        toolWindow.setIcon(new );
+        toolWindow.setAvailable(true, null);
+
+
+        TerminalWidgetFactory factory = TerminalWidgetFactory.getInstance();
+        TerminalWidget terminalWidget = factory.create(project);
+        JPanel panel = terminalWidget.getComponent();
+    }
+*/
+
+
 }
 
