@@ -93,7 +93,6 @@ public class TerminalUtil {
 
         }
         if (consoleView != null) {
-            LaytonNotification.notification("copy error: "+project.getBasePath(),NotificationType.ERROR);
             if (!toolWindow.isVisible()) {
                 if(toolWindow.getContentManager().getContentCount()>=0){
                     boolean exist = false;
