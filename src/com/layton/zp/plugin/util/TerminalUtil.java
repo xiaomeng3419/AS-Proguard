@@ -93,7 +93,6 @@ public class TerminalUtil {
 
         }
         if (consoleView != null) {
-            toolWindow.getProject().getBasePath();
             LaytonNotification.notification("copy error: "+project.getBasePath(),NotificationType.ERROR);
             if (!toolWindow.isVisible()) {
                 if(toolWindow.getContentManager().getContentCount()>=0){
@@ -152,7 +151,6 @@ public class TerminalUtil {
                     }
                     if(!exist){
                         consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
-                        projectContext.setConsoleView(consoleView);
                         content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
                         toolWindow.getContentManager().addContent(content);
                         toolWindow.getContentManager().setSelectedContent(content, true);
@@ -193,7 +191,7 @@ public class TerminalUtil {
                 });
             }
             consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
-            Content content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
+            content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
             toolWindow.getContentManager().addContent(content);
             toolWindow.getContentManager().setSelectedContent(content, true);
             contextpuplate(project, consoleView, toolWindow, content);
