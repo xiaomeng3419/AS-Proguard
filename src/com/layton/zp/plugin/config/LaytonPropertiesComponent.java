@@ -16,16 +16,16 @@ import java.util.List;
  */
 @State(name = "LaytonPersistent",storages = {@Storage(value = "layton_persistent.xml")})
 public class LaytonPropertiesComponent implements PersistentStateComponent<LaytonPropertiesComponent.LaytonState> {
-//    private static LaytonPropertiesComponent  laytonPropertiesComponent = new LaytonPropertiesComponent();
-//
-//    private  LaytonPropertiesComponent(){}
-//    public static LaytonPropertiesComponent getInstance(){
-//        if (laytonPropertiesComponent == null){
-//            return new LaytonPropertiesComponent();
-//        }else {
-//            return laytonPropertiesComponent;
-//        }
-//    }
+    private static LaytonPropertiesComponent  laytonPropertiesComponent = new LaytonPropertiesComponent();
+
+    private  LaytonPropertiesComponent(){}
+    public static LaytonPropertiesComponent getInstance(){
+        if (laytonPropertiesComponent == null){
+            return new LaytonPropertiesComponent();
+        }else {
+            return laytonPropertiesComponent;
+        }
+    }
 
     LaytonState laytonState = new LaytonState();
 

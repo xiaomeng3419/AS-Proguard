@@ -28,7 +28,8 @@
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="gradle-2.3.0" level="project" />
-    <orderEntry type="library" exported="" name="lib" level="project" />
-    <orderEntry type="library" exported="" name="ddmlib-30.2.2-sources" level="project" />
+    <orderEntry type="library" name="ddmlib-30.2.2" level="project" />
+    <orderEntry type="library" name="android" level="project" />
+    <orderEntry type="library" name="android1" level="project" />
   </component>
 </module>

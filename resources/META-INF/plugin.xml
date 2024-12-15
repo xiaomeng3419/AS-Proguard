@@ -24,7 +24,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <!--    <applicationService serviceImplementation="com.layton.zp.plugin.config.LaytonPropertiesComponent"/>-->
+<!--            <applicationService serviceImplementation="com.layton.zp.plugin.config.LaytonPropertiesComponent"/>-->
         <toolWindow id="Layton Proguard" factoryClass="com.layton.zp.plugin.ui.factory.JsonFormatWindowFactory"
                     anchor="right" icon="/img/decode_icon.svg"/>
     </extensions>
@@ -49,4 +49,9 @@
         <!-- Add your actions here -->
     </actions>
 
+    <application-components>
+        <component>
+            <implementation-class>com.layton.zp.plugin.config.LaytonComponent</implementation-class>
+        </component>
+    </application-components>
 </idea-plugin>

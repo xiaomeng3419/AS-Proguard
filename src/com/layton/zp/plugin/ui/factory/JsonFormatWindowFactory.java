@@ -9,16 +9,16 @@ import com.layton.zp.plugin.ui.MainTabPage;
 import org.jetbrains.annotations.NotNull;
 
 public class JsonFormatWindowFactory implements ToolWindowFactory {
-    private static Project project;
+    private  Project project;
 
-    public static Project getProject() {
+    public Project getProject() {
         return project;
     }
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        this.project = project;
-        MainTabPage mainTabPage = new MainTabPage(project);
+        this.project = toolWindow.getProject();
+        MainTabPage mainTabPage = new MainTabPage(toolWindow.getProject());
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(mainTabPage.getLaytonPanel(), "", false);
         toolWindow.getContentManager().addContent(content);

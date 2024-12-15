@@ -4,19 +4,29 @@ import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.impl.ContentImpl;
+import com.layton.zp.plugin.model.ProjectContext;
 import com.layton.zp.plugin.ui.factory.JsonFormatWindowFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class TerminalUtil {
     private static Content content;
-    private static ConsoleView consoleView;
-    private static ToolWindow toolWindow;
+//
+    private static Map<String, ProjectContext> contextMap = new HashMap<>();
+//    private static ConsoleView consoleView;
+//
+
+//    private static ToolWindow toolWindow;
+
 
 /*    public static ConsoleView getConsoleView() {
         if (consoleView != null) {
@@ -70,8 +80,21 @@ public class TerminalUtil {
         return this.consoleView;
     }*/
 
-    public static ConsoleView getConsoleView() {
+    public static ConsoleView getConsoleView(Project project) {
+        ConsoleView consoleView = null;
+        ToolWindow toolWindow = null;
+        ProjectContext projectContext = null;
+        if(contextMap.containsKey(project.getName())){
+            projectContext = contextMap.get(project.getName());
+            if(projectContext!=null ){
+                consoleView = projectContext.getConsoleView();
+                toolWindow = projectContext.getToolWindow();
+            }
+
+        }
         if (consoleView != null) {
+            toolWindow.getProject().getBasePath();
+            LaytonNotification.notification("copy error: "+project.getBasePath(),NotificationType.ERROR);
             if (!toolWindow.isVisible()) {
                 if(toolWindow.getContentManager().getContentCount()>=0){
                     boolean exist = false;
@@ -82,14 +105,16 @@ public class TerminalUtil {
                         }
                     }
                     if(!exist){
-                        consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(JsonFormatWindowFactory.getProject()).getConsole();
+//                        consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(JsonFormatWindowFactory.getProject()).getConsole();
+                        consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
                         content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
+                        projectContext.setConsoleView(consoleView);
                         toolWindow.getContentManager().addContent(content);
                         toolWindow.getContentManager().setSelectedContent(content, true);
                     }
                     toolWindow.activate(null, true, false);
                 } else {
-                    createConsoleView();
+                    createConsoleView(project);
                 }
 
 /*                toolWindow.show(new Runnable() {
@@ -115,7 +140,8 @@ public class TerminalUtil {
                 toolWindow.getContentManager().setSelectedContent(content, true);*/
             } else {
                 if (toolWindow.getContentManager().getContentCount() <= 0) {
-                    createConsoleView();
+                    System.out.println("-----------1");
+                    createConsoleView(project);
                 } else {
                     boolean exist = false;
                     Content[] contents = toolWindow.getContentManager().getContents();
@@ -125,7 +151,7 @@ public class TerminalUtil {
                         }
                     }
                     if(!exist){
-                        consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(JsonFormatWindowFactory.getProject()).getConsole();
+                        consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
                         content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
                         toolWindow.getContentManager().addContent(content);
                         toolWindow.getContentManager().setSelectedContent(content, true);
@@ -142,17 +168,19 @@ public class TerminalUtil {
             }
             return consoleView;
         }
-        return createConsoleView();
+        return createConsoleView(project);
     }
 
-    public static ConsoleView createConsoleView() {
+    public static ConsoleView createConsoleView(Project project) {
+        ConsoleView consoleView = null;
         try {
 //                ToolWindowManager.getInstance(project).registerToolWindow(ToolWindowId.RUN,true, ToolWindowAnchor.BOTTOM);
 //                RunContentManager.getInstance(project).getContentDescriptorToolWindowId()
-            toolWindow = ToolWindowManager.getInstance(JsonFormatWindowFactory.getProject()).getToolWindow(ToolWindowId.RUN);
+//            toolWindow = ToolWindowManager.getInstance(JsonFormatWindowFactory.getProject()).getToolWindow(ToolWindowId.RUN);
+            ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow(ToolWindowId.RUN);
             if (toolWindow == null) {
-                ToolWindowManager.getInstance(JsonFormatWindowFactory.getProject()).registerToolWindow(ToolWindowId.RUN, true, ToolWindowAnchor.BOTTOM);
-                toolWindow = ToolWindowManager.getInstance(JsonFormatWindowFactory.getProject()).getToolWindow(ToolWindowId.RUN);
+                ToolWindowManager.getInstance(project).registerToolWindow(ToolWindowId.RUN, true, ToolWindowAnchor.BOTTOM);
+                toolWindow = ToolWindowManager.getInstance(project).getToolWindow(ToolWindowId.RUN);
             }
             toolWindow.activate(null, true, false);
             if (!toolWindow.isVisible()) {
@@ -163,10 +191,11 @@ public class TerminalUtil {
                     }
                 });
             }
-            consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(JsonFormatWindowFactory.getProject()).getConsole();
-            content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
+            consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+            Content content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
             toolWindow.getContentManager().addContent(content);
             toolWindow.getContentManager().setSelectedContent(content, true);
+            contextpuplate(project, consoleView, toolWindow, content);
             return consoleView;
         } catch (Exception e) {
             LaytonNotification.notification(e.toString(), NotificationType.ERROR);
@@ -175,17 +204,25 @@ public class TerminalUtil {
         return consoleView;
     }
 
-    public static void outputDecodeLog(String result) {
-        getConsoleView().print("Layton·ZHANGFPAN", ConsoleViewContentType.LOG_ERROR_OUTPUT);
-        getConsoleView().print(" - [" + TimeUtil.liveTime() + "] - ", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
-        getConsoleView().print("decode exception: ".concat("\r\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
-        getConsoleView().print(result, ConsoleViewContentType.LOG_DEBUG_OUTPUT);
-        getConsoleView().print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
-        getConsoleView().print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
+    private static void contextpuplate(Project project,ConsoleView consoleView, ToolWindow toolWindow, Content content){
+        ProjectContext projectContext = new ProjectContext();
+        projectContext.setConsoleView(consoleView);
+        projectContext.setToolWindow(toolWindow);
+        projectContext.setContent(content);
+        contextMap.put(project.getName(), projectContext);
     }
 
-    public static void outputJson(String content) {
-        output("json format exception:", content);
+    public static void outputDecodeLog(Project project,String result) {
+        getConsoleView(project).print("Layton·ZHANGFPAN", ConsoleViewContentType.LOG_ERROR_OUTPUT);
+        getConsoleView(project).print(" - [" + TimeUtil.liveTime() + "] - ", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        getConsoleView(project).print("decode exception: ".concat("\r\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
+        getConsoleView(project).print(result, ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        getConsoleView(project).print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
+        getConsoleView(project).print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
+    }
+
+    public static void outputJson(Project project, String content) {
+        output(project, "json format exception:", content);
 /*        getConsoleView().print("Layton·ZHANGFPAN", ConsoleViewContentType.LOG_ERROR_OUTPUT);
         getConsoleView().print(" - [" + TimeUtil.liveTime() + "] - ", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
         getConsoleView().print("json format exception: ".concat("\r\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
@@ -195,13 +232,13 @@ public class TerminalUtil {
     }
 
 
-    public static void output(String tag, String content) {
-        getConsoleView().print("Layton·ZHANGFPAN", ConsoleViewContentType.LOG_ERROR_OUTPUT);
-        getConsoleView().print(" - [" + TimeUtil.liveTime() + "] - ", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
-        getConsoleView().print(tag + ": ".concat("\r\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
-        getConsoleView().print(content, ConsoleViewContentType.LOG_DEBUG_OUTPUT);
-        getConsoleView().print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
-        getConsoleView().print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
+    public static void output(Project project, String tag, String content) {
+        getConsoleView(project).print("Layton·ZHANGFPAN", ConsoleViewContentType.LOG_ERROR_OUTPUT);
+        getConsoleView(project).print(" - [" + TimeUtil.liveTime() + "] - ", ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        getConsoleView(project).print(tag + ": ".concat("\r\n"), ConsoleViewContentType.LOG_INFO_OUTPUT);
+        getConsoleView(project).print(content, ConsoleViewContentType.LOG_DEBUG_OUTPUT);
+        getConsoleView(project).print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
+        getConsoleView(project).print("\r\n", ConsoleViewContentType.NORMAL_OUTPUT);
     }
 
 

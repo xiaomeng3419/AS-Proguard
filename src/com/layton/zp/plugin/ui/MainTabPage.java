@@ -48,6 +48,10 @@ public class MainTabPage {
     private JPanel jsonTabContent;
     private Project project;
 
+    private static ThreadLocal<Project> threadLocalVariable = new ThreadLocal<>();
+
+
+
     public JPanel getLaytonPanel() {
         return mainPanelLayout;
     }
@@ -78,13 +82,13 @@ public class MainTabPage {
                     } catch (Exception exception) {
                         result = result + ": " + Utils.LINE_SPLIT + unicodeToTransformResult;
                         exception.printStackTrace();
-                        TerminalUtil.outputJson(exception.getMessage());
+                        TerminalUtil.outputJson(project,exception.getMessage());
                     }
                 }
                 destContent.setText(result);
                 if (parseSucceed) {
-                    TerminalUtil.output("origin content:", originContent.getText());
-                    TerminalUtil.output("JSON", result);
+                    TerminalUtil.output(project, "origin content:", originContent.getText());
+                    TerminalUtil.output(project, "JSON", result);
                     originContent.setText("");
                 }
             }
@@ -93,7 +97,7 @@ public class MainTabPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!originContent.getText().isEmpty()) {
-                    TerminalUtil.output("log", originContent.getText());
+                    TerminalUtil.output(project,"log", originContent.getText());
                 }
             }
         });
