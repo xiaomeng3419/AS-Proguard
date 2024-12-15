@@ -152,6 +152,7 @@ public class TerminalUtil {
                     }
                     if(!exist){
                         consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+                        projectContext.setConsoleView(consoleView);
                         content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), "Proguard Decode", false);
                         toolWindow.getContentManager().addContent(content);
                         toolWindow.getContentManager().setSelectedContent(content, true);
